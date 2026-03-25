@@ -1,0 +1,8 @@
+.memory-wrapper {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--glass-border);
+}

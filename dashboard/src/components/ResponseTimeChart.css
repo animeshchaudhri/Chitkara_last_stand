@@ -1,0 +1,21 @@
+.chart-wrapper {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  padding: 1.5rem 1rem 1rem;
+  border: 1px solid var(--glass-border);
+}
+
+.chart-placeholder {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-bright);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}

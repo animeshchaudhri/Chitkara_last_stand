@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ms_db
+    ports:
+      - "5434:5432"
+
+  auth-service:
+    build: ./auth-service
+    environment:
+      PORT: 3011
+      JWT_SECRET: ms_secret_key_2024
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ms_db
+    ports:
+      - "3011:3011"
+    depends_on:
+      - postgres
+
+  data-service:
+    build: ./data-service
+    environment:
+      PORT: 3012
+      JWT_SECRET: ms_secret_key_2024
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ms_db
+    ports:
+      - "3012:3012"
+    depends_on:
+      - postgres
+
+  report-service:
+    build: ./report-service
+    environment:
+      PORT: 3013
+      JWT_SECRET: ms_secret_key_2024
+      DATA_SERVICE_URL: http://data-service:3012
+    ports:
+      - "3013:3013"
+    depends_on:
+      - data-service
+
+  gateway:
+    build: ./gateway
+    environment:
+      PORT: 3002
+      JWT_SECRET: ms_secret_key_2024
+      AUTH_SERVICE_URL:   http://auth-service:3011
+      DATA_SERVICE_URL:   http://data-service:3012
+      REPORT_SERVICE_URL: http://report-service:3013
+    ports:
+      - "3002:3002"
+    depends_on:
+      - auth-service
+      - data-service
+      - report-service

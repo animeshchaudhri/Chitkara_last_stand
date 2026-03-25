@@ -1,0 +1,401 @@
+/* ═══════════════════════════════════════════════════════════════
+   BenchmarkResults.css — Load Test Benchmark Results
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Toolbar ────────────────────────────────────────────────────── */
+.bench-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ── VU tabs ─────────────────────────────────────────────────────── */
+.vu-tabs {
+  display: flex;
+  gap: 0.2rem;
+  background: rgba(3, 7, 18, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 0.2rem;
+}
+
+.vu-tab {
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s var(--ease);
+  font-family: var(--font-sans);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.vu-tab:hover {
+  color: var(--text-secondary);
+  background: rgba(241, 245, 249, 0.04);
+}
+
+.vu-tab.active {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+}
+
+/* ── Source badge ────────────────────────────────────────────────── */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.source-badge.run {
+  background: rgba(16, 185, 129, 0.08);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.source-badge.run::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  flex-shrink: 0;
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+.source-badge.paper {
+  background: rgba(241, 245, 249, 0.04);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.source-badge.paper::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Performance table ───────────────────────────────────────────── */
+.bench-table-wrap {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  margin-bottom: 2rem;
+}
+
+.bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-table thead tr {
+  background: rgba(3, 7, 18, 0.5);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.bench-table th {
+  padding: 1rem 1.4rem;
+  text-align: left;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.bench-table th:not(:first-child) {
+  border-left: 1px solid var(--border-muted);
+}
+
+.bench-table tbody tr {
+  border-bottom: 1px solid var(--border-muted);
+  transition: background 0.12s var(--ease);
+}
+
+.bench-table tbody tr:nth-child(even) {
+  background: rgba(241, 245, 249, 0.015);
+}
+
+.bench-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.bench-table tbody tr:last-child { border-bottom: none; }
+
+.bench-table td {
+  padding: 0.75rem 1.4rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.bench-table td:not(:first-child) {
+  border-left: 1px solid var(--border-muted);
+}
+
+.bench-metric-name {
+  color: var(--text-muted) !important;
+  font-size: 0.65rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.bench-val {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bench-val.best  { color: #34d399 !important; }
+.bench-val.worst { color: #f43f5e !important; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.55rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.best-badge {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.worst-badge {
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+/* ── Scoring section ─────────────────────────────────────────────── */
+.scoring-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Formula box ─────────────────────────────────────────────────── */
+.formula-box {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-left: 2px solid #6366f1;
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: inset 0 0 60px rgba(99, 102, 241, 0.03);
+}
+
+.formula-title {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+.formula {
+  font-size: 1.15rem;
+  font-family: "Georgia", "Times New Roman", serif;
+  color: var(--text-primary);
+  margin: 0 0 0.65rem 0;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+.sigma {
+  font-size: 1.4rem;
+  color: #818cf8;
+  vertical-align: middle;
+}
+
+.formula-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0 0 1.1rem 0;
+}
+
+.weights-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.weight-chip {
+  background: rgba(99, 102, 241, 0.07);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 6px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.weight-chip strong {
+  color: #818cf8;
+  font-weight: 700;
+}
+
+/* ── Rating cards grid ───────────────────────────────────────────── */
+.ratings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+  .ratings-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Individual rating card ──────────────────────────────────────── */
+.rating-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-top: 2px solid;
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.rating-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.rating-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.rating-card h4 {
+  margin: 0 0 0.3rem 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.overall-score {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1.25rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-denom {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ── Per-criterion rows ──────────────────────────────────────────── */
+.criterion-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.criterion-row:last-child { margin-bottom: 0; }
+
+.crit-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  min-width: 130px;
+  letter-spacing: 0.01em;
+}
+
+/* ── Score bar ───────────────────────────────────────────────────── */
+.star-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.star-bar-bg {
+  flex: 1;
+  height: 3px;
+  background: rgba(241, 245, 249, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.star-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s var(--ease);
+  background: linear-gradient(90deg, #6366f1, #3b82f6);
+}
+
+.star-val {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 2rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .bench-toolbar { flex-direction: column; align-items: flex-start; }
+  .vu-tabs { width: 100%; overflow-x: auto; }
+  .bench-table th,
+  .bench-table td { padding: 0.6rem 0.75rem; font-size: 0.78rem; }
+  .formula { font-size: 0.95rem; }
+  .overall-score { font-size: 2.2rem; }
+}

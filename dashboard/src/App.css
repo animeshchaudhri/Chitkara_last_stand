@@ -1,0 +1,365 @@
+/* ═══════════════════════════════════════════════════════════════
+   App.css — ArchBench Dashboard  ·  Global Layout & Shell
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Core palette */
+  --bg-root:      #030712;
+  --bg-card:      rgba(15, 23, 42, 0.55);
+  --bg-elevated:  rgba(30, 41, 59, 0.7);
+  --bg-input:     rgba(15, 23, 42, 0.8);
+
+  /* Borders */
+  --border-subtle: rgba(148, 163, 184, 0.08);
+  --border-muted:  rgba(148, 163, 184, 0.05);
+  --border-bright: rgba(148, 163, 184, 0.14);
+
+  /* Architecture accent colours */
+  --blue:    #3b82f6;
+  --amber:   #f59e0b;
+  --emerald: #10b981;
+  --indigo:  #6366f1;
+  --violet:  #8b5cf6;
+
+  /* Text hierarchy */
+  --text-primary:   #f1f5f9;
+  --text-secondary: rgba(241, 245, 249, 0.6);
+  --text-muted:     rgba(241, 245, 249, 0.35);
+  --text-dim:       rgba(241, 245, 249, 0.18);
+
+  /* Semantic */
+  --good:   #10b981;
+  --warn:   #f59e0b;
+  --bad:    #f43f5e;
+  --good-bg: rgba(16, 185, 129, 0.08);
+  --bad-bg:  rgba(244, 63, 94, 0.08);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', ui-monospace, monospace;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Glass */
+  --glass-bg: rgba(15, 23, 42, 0.55);
+  --glass-blur: blur(24px);
+  --glass-border: rgba(148, 163, 184, 0.08);
+}
+
+/* ── App Shell ─────────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-root);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Aurora background — two glowing blobs */
+.app::before,
+.app::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(120px);
+  opacity: 0.18;
+}
+
+.app::before {
+  width: 700px;
+  height: 700px;
+  top: -200px;
+  left: -200px;
+  background: radial-gradient(circle, #6366f1 0%, #3b82f6 50%, transparent 70%);
+  animation: aurora-drift 18s ease-in-out infinite alternate;
+}
+
+.app::after {
+  width: 600px;
+  height: 600px;
+  bottom: -150px;
+  right: -150px;
+  background: radial-gradient(circle, #10b981 0%, #6366f1 50%, transparent 70%);
+  animation: aurora-drift 22s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes aurora-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(60px, 40px) scale(1.1); }
+  100% { transform: translate(-30px, 20px) scale(0.95); }
+}
+
+/* ── Header ────────────────────────────────────────────────────── */
+.header {
+  background: rgba(3, 7, 18, 0.8);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 2.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Rainbow border bottom */
+  box-shadow: 0 1px 0 0 transparent,
+              0 0 0 0 transparent;
+}
+
+/* Gradient accent line at very top of header */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    #6366f1 20%,
+    #3b82f6 40%,
+    #10b981 60%,
+    #f59e0b 80%,
+    transparent 100%
+  );
+  opacity: 0.7;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Wordmark */
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.wordmark-icon {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
+}
+
+.wordmark-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #f1f5f9 30%, rgba(241,245,249,0.6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.wordmark-badge {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.last-updated {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
+
+.refresh-btn {
+  background: rgba(99, 102, 241, 0.08);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  transition: all 0.18s var(--ease);
+  font-family: var(--font-sans);
+}
+
+.refresh-btn:hover {
+  background: rgba(99, 102, 241, 0.16);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.refresh-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Main Content ──────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+  counter-reset: sections;
+}
+
+/* ── Section Shell ─────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  counter-increment: sections;
+}
+
+/* Section title — numbered, gradient accent */
+.section-title {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  line-height: 1;
+}
+
+/* Auto-numbered badge */
+.section-title::before {
+  content: "0" counter(sections);
+  font-size: 0.6rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 0.22rem 0.5rem;
+  border-radius: 5px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-bright) 0%, transparent 100%);
+}
+
+.section-subtitle {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  margin: -1rem 0 1.5rem 0;
+  padding-left: calc(0.6rem + 2.2rem + 0.85rem); /* align with title text */
+  line-height: 1.65;
+}
+
+/* ── Two-column grid ───────────────────────────────────────────── */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .two-col-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Generic glass card ────────────────────────────────────────── */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 1.25rem 2rem;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  border-top: 1px solid var(--border-muted);
+  letter-spacing: 0.03em;
+  line-height: 2;
+  background: rgba(3, 7, 18, 0.6);
+  backdrop-filter: var(--glass-blur);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+  color: #818cf8;
+}
+
+/* ── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1.25rem;
+    height: auto;
+    min-height: 64px;
+    flex-wrap: wrap;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .main {
+    padding: 2rem 1.25rem;
+    gap: 2.5rem;
+  }
+}

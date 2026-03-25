@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dashboard/dist/
+**/dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+**/.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# k6 raw output (large JSON files — keep only _summary.json files)
+load-tests/results/*.json
+!load-tests/results/*_summary.json
+!load-tests/results/benchmark_summary.json
+
+# Docker
+.docker/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+/.claude

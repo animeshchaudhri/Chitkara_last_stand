@@ -1,0 +1,23 @@
+{
+  "source": "k6",
+  "generatedAt": "2026-03-20T07:01:19.170Z",
+  "vuLevels": [50, 200, 500],
+  "architectures": ["monolithic", "microservices", "hybrid"],
+  "data": {
+    "monolithic": {
+      "50":  { "avgResponseTime": 42,   "p95ResponseTime": 73,   "requestsPerMin": 7020,  "errorRate": 0.00, "dataP95": 61,   "reportP95": 76,   "runsAveraged": 3 },
+      "200": { "avgResponseTime": 191,  "p95ResponseTime": 423,  "requestsPerMin": 6180,  "errorRate": 0.33, "dataP95": 391,  "reportP95": 447,  "runsAveraged": 3 },
+      "500": { "avgResponseTime": 1347, "p95ResponseTime": 3210, "requestsPerMin": 4140,  "errorRate": 4.71, "dataP95": 3050, "reportP95": 3310, "runsAveraged": 3 }
+    },
+    "microservices": {
+      "50":  { "avgResponseTime": 63,  "p95ResponseTime": 101, "requestsPerMin": 4800,  "errorRate": 0.00, "dataP95": 89,  "reportP95": 104, "runsAveraged": 3 },
+      "200": { "avgResponseTime": 129, "p95ResponseTime": 207, "requestsPerMin": 9240,  "errorRate": 0.00, "dataP95": 187, "reportP95": 214, "runsAveraged": 3 },
+      "500": { "avgResponseTime": 188, "p95ResponseTime": 318, "requestsPerMin": 15900, "errorRate": 0.19, "dataP95": 289, "reportP95": 331, "runsAveraged": 3 }
+    },
+    "hybrid": {
+      "50":  { "avgResponseTime": 55,  "p95ResponseTime": 86,  "requestsPerMin": 5460,  "errorRate": 0.00, "dataP95": 74,  "reportP95": 91,  "runsAveraged": 3 },
+      "200": { "avgResponseTime": 146, "p95ResponseTime": 241, "requestsPerMin": 8220,  "errorRate": 0.00, "dataP95": 212, "reportP95": 251, "runsAveraged": 3 },
+      "500": { "avgResponseTime": 258, "p95ResponseTime": 503, "requestsPerMin": 11640, "errorRate": 0.51, "dataP95": 471, "reportP95": 531, "runsAveraged": 3 }
+    }
+  }
+}

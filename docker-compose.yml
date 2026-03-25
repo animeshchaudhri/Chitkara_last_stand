@@ -1,0 +1,206 @@
+version: '3.9'
+
+# ─────────────────────────────────────────────────────────────
+# Master docker-compose — starts ALL three architectures +
+# the dashboard in one command:
+#
+#   docker compose up --build
+#
+# Dashboard: http://localhost:5173
+# Monolithic API: http://localhost:3001
+# Microservices gateway: http://localhost:3002
+# Hybrid gateway: http://localhost:3003
+# ─────────────────────────────────────────────────────────────
+
+services:
+
+  # ═══ DASHBOARD (port 5173) ══════════════════════════════════
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "5173:80"
+    depends_on:
+      monolithic:
+        condition: service_healthy
+      ms-gateway:
+        condition: service_healthy
+      hybrid-gateway:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mono-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mono_db
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+
+  # ═══ MONOLITHIC (port 3001) ════════════════════════════════
+  monolithic:
+    build: ./monolithic
+    environment:
+      PORT: 3001
+      JWT_SECRET: mono_secret_key_2024
+      POSTGRES_HOST: mono-postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mono_db
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mono-postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ═══ MICROSERVICES (gateway port 3002) ════════════════════
+  ms-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ms_db
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+
+  ms-auth-service:
+    build: ./microservices/auth-service
+    environment:
+      PORT: 3011
+      JWT_SECRET: ms_secret_key_2024
+      POSTGRES_HOST: ms-postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ms_db
+    ports:
+      - "3011:3011"
+    depends_on:
+      - ms-postgres
+    restart: unless-stopped
+
+  ms-data-service:
+    build: ./microservices/data-service
+    environment:
+      PORT: 3012
+      JWT_SECRET: ms_secret_key_2024
+      POSTGRES_HOST: ms-postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ms_db
+    ports:
+      - "3012:3012"
+    depends_on:
+      - ms-postgres
+    restart: unless-stopped
+
+  ms-report-service:
+    build: ./microservices/report-service
+    environment:
+      PORT: 3013
+      JWT_SECRET: ms_secret_key_2024
+      DATA_SERVICE_URL: http://ms-data-service:3012
+    ports:
+      - "3013:3013"
+    depends_on:
+      - ms-data-service
+    restart: unless-stopped
+
+  ms-gateway:
+    build: ./microservices/gateway
+    environment:
+      PORT: 3002
+      JWT_SECRET: ms_secret_key_2024
+      AUTH_SERVICE_URL:   http://ms-auth-service:3011
+      DATA_SERVICE_URL:   http://ms-data-service:3012
+      REPORT_SERVICE_URL: http://ms-report-service:3013
+    ports:
+      - "3002:3002"
+    depends_on:
+      - ms-auth-service
+      - ms-data-service
+      - ms-report-service
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ═══ HYBRID (gateway port 3003) ═══════════════════════════
+  hybrid-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hybrid_db
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+
+  hybrid-app:
+    build: ./hybrid/app
+    environment:
+      PORT: 3021
+      JWT_SECRET: hybrid_secret_key_2024
+      POSTGRES_HOST: hybrid-postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hybrid_db
+    ports:
+      - "3021:3021"
+    depends_on:
+      - hybrid-postgres
+    restart: unless-stopped
+
+  hybrid-gateway:
+    build: ./hybrid/gateway
+    environment:
+      PORT: 3003
+      JWT_SECRET: hybrid_secret_key_2024
+      APP_URL: http://hybrid-app:3021
+    ports:
+      - "3003:3003"
+    depends_on:
+      - hybrid-app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ═══ LIVE LOAD GENERATOR ════════════════════════════════════
+  # Keeps all three services under realistic traffic so the
+  # dashboard shows meaningful live metrics (not just idle state).
+  # Override VU count with: VUS=50
+  live-load:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./load-tests:/app/load-tests
+    command: >
+      sh -c "sleep 15 && VUS=${VUS:-8} node load-tests/live-load.js"
+    environment:
+      VUS:        ${VUS:-8}
+      MONO_URL:   http://monolithic:3001
+      MS_URL:     http://ms-gateway:3002
+      HYBRID_URL: http://hybrid-gateway:3003
+    depends_on:
+      monolithic:
+        condition: service_healthy
+      ms-gateway:
+        condition: service_healthy
+      hybrid-gateway:
+        condition: service_healthy
+    restart: unless-stopped
