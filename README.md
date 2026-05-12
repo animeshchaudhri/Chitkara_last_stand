@@ -1,4 +1,20 @@
 # ArchBench — Backend Architecture Comparative Study
+## Scalable Secure Backend Study (2210992364, 2210991266, 2210992373, 2210992330)
+
+### Team Details
+
+| Name | Roll Number |
+|------|-------------|
+| Shubham Goyal | 2210992364 |
+| Animesh Chaudhri | 2210991266 |
+| Shwetank Dohroo | 2210992373 |
+| Shivanshu | 2210992330 |
+
+**Project Type**: Research Project  
+**Current Status**: Completed - Load Testing & Benchmark Analysis  
+**Institution**: Chitkara University
+
+---
 
 **A Practical Comparative Study of Scalable and Secure Backend Architectures for Resource-Constrained Web Applications**
 
