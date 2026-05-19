@@ -11,8 +11,12 @@ const DATA_SVC   = process.env.DATA_SERVICE_URL || 'http://localhost:3012';
 app.use(cors());
 app.use(express.json());
 
+app.get('/health', (_req, res) =>
+  res.json({ status: 'ok', service: 'report', architecture: 'microservices' }));
+
 // ── JWT Middleware ─────────────────────────────────────────────
 const jwtMiddleware = (req, res, next) => {
+  if (req.path === '/health') return next();
   const header = req.headers['authorization'];
   if (!header) return res.status(401).json({ error: 'No token provided' });
   const token = header.startsWith('Bearer ') ? header.slice(7) : header;
@@ -57,9 +61,6 @@ app.get('/api/report/activity', async (req, res) => {
     res.status(502).json({ error: 'Could not reach data-service', detail: err.message });
   }
 });
-
-app.get('/health', (_req, res) =>
-  res.json({ status: 'ok', service: 'report', architecture: 'microservices' }));
 
 app.listen(PORT, () =>
   console.log(`[REPORT-SERVICE] Running on http://localhost:${PORT}`));
